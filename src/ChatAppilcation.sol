@@ -10,7 +10,6 @@ contract ChatAppilcation {
         bytes32 senderUsername;
         string sentMessage;
         string receiveMessage;
-        uint timeStamp;
         bytes32 recieverUsername;
     }
 
@@ -86,10 +85,8 @@ contract ChatAppilcation {
         newChat.senderUsername = user.name;
         newChat.sentMessage = messages[msg.sender][receiver];
         newChat.receiveMessage = messages[receiver][user.account];
-        newChat.timeStamp = block.timestamp;
         newChat.recieverUsername = _receiverUsername;
 
-        // Add the message to sender's chat history
         chats[msg.sender][_receiverUsername].push(newChat);
 
         emit MessageSent(

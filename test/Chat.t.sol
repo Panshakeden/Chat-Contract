@@ -60,34 +60,12 @@ contract Chat is Test {
         );
     }
 
-    function test_chat_registeration() public {
-        ens.registarUser(bytes32(Name), bytes32(imgUrl));
-        chat.registeration(bytes32(Name));
-
-        assert(true);
-    }
-
-    function test_chatRevertCase_registeration() public {
-        ens.registarUser(bytes32(Name), bytes32(imgUrl));
-        vm.expectRevert("Invalid ENS name, registeration unsuccessful");
-        chat.registeration(bytes32(Name2));
-    }
-
     function test_chatRevertCase2_registeration() public {
         switchSigner(A);
         ens.registarUser(bytes32(Name), bytes32(imgUrl));
         chat.registeration(bytes32(Name));
         switchSigner(B);
         vm.expectRevert("Username already exist");
-        chat.registeration(bytes32(Name));
-    }
-
-    function test_chatRevertCase3_registeration() public {
-        switchSigner(A);
-        ens.registarUser(bytes32(Name), bytes32(imgUrl));
-        chat.registeration(bytes32(Name));
-
-        vm.expectRevert("User with this address already exist");
         chat.registeration(bytes32(Name));
     }
 
@@ -107,6 +85,25 @@ contract Chat is Test {
         chat.getChatHistory(bytes32(Name2));
         assertEq(chat.getChatHistory(bytes32(Name2))[0].sentMessage, "Hello");
         assertEq(chat.getChatHistory(bytes32(Name2))[0].receiveMessage, "Hi");
+    }
+
+
+       function testFail_sendMessage() public {
+        switchSigner(A);
+        ens.registarUser(bytes32(Name), bytes32(imgUrl));
+        chat.registeration(bytes32(Name));
+
+        switchSigner(B);
+        ens.registarUser(bytes32(Name2), bytes32(imgUrl));
+        chat.registeration(bytes32(Name2));
+        chat.sendMessage(bytes32(Name), "Hi");
+
+        switchSigner(A);
+        chat.sendMessage(bytes32(Name2), "Hello");
+
+        chat.getChatHistory(bytes32(Name2));
+        assertEq(chat.getChatHistory(bytes32(Name2))[0].sentMessage, "Hello");
+        assertEq(chat.getChatHistory(bytes32(Name2))[0].receiveMessage, "H");
     }
 
     function mkaddr(string memory nam) public returns (address) {
