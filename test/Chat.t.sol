@@ -13,8 +13,8 @@ contract Chat is Test {
     address B = address(0xb);
 
     string img = "img-url";
-    bytes Name = abi.encodePacked("Okste");
-    bytes Name2 = abi.encodePacked("Adekunle");
+    bytes Name = abi.encodePacked("paul");
+    bytes Name2 = abi.encodePacked("peter");
     bytes imgUrl = abi.encodePacked(string(img));
 
     function setUp() public {
